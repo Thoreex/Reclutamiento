@@ -1,0 +1,44 @@
+version: "3.1"
+services:
+    flask:
+        build: .
+        ports:
+            - "${APP_PORT:-5000}:5000"
+        volumes:
+            - .:/reclutamiento
+        networks:
+            - network
+        depends_on:
+            postgres:
+                condition: service_healthy
+    postgres:
+        image: postgres:14.1-alpine
+        ports:
+            - "${DB_PORT:-5432}:5432"
+        environment:
+            POSTGRES_DB: "${DB_DATABASE}"
+            POSTGRES_USER: "${DB_USERNAME}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD}"
+        volumes:
+            - data:/var/lib/postgresql/data
+            - ./scripts:/docker-entrypoint-initdb.d
+        networks:
+            - network
+        healthcheck:
+          test: ["CMD", "pg_isready"]
+          retries: 5
+          timeout: 5s
+    adminer:
+        image: adminer:4.8.1
+        ports:
+            - "${ADMIN_PORT:-8080}:8080"
+        environment:
+            ADMINER_DEFAULT_SERVER: "${DB_HOST}"
+        networks:
+            - network
+networks:
+    network:
+        driver: bridge
+volumes:
+    data:
+        driver: local

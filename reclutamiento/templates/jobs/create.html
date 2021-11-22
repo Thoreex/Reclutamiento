@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Job{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" name="title" id="title" value="{{ request.form['title'] }}" required>
+        <label for="title">Title</label>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <textarea class="form-control" name="body" id="body" style="height: 100px"></textarea>
+        <label for="body">Body</label>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+{% endblock %}

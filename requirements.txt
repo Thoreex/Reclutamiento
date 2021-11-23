@@ -5,4 +5,5 @@ Jinja2==3.0.3
 MarkupSafe==2.0.1
 psycopg2==2.9.2
 python-dotenv==0.19.2
+waitress==2.0.0
 Werkzeug==2.0.2

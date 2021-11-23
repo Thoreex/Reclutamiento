@@ -2,7 +2,7 @@ version: "3.1"
 services:
     flask:
         build: .
-        image: reclutamiento-flask:0.0.1
+        image: reclutamiento_flask:0.0.1
         command: waitress-serve --port="${APP_PORT}" --call "reclutamiento:create_app"
         env_file:
             - .env
@@ -24,7 +24,6 @@ services:
             POSTGRES_PASSWORD: "${DB_PASSWORD}"
         volumes:
             - data:/var/lib/postgresql/data
-            - ./scripts:/docker-entrypoint-initdb.d
         networks:
             - network
         healthcheck:
@@ -41,6 +40,15 @@ services:
         networks:
             - network
         restart: unless-stopped
+    flyway:
+        image: flyway/flyway:8.0.5
+        command: -url=jdbc:postgresql://postgres:${DB_PORT}/${DB_DATABASE} -user=${DB_USERNAME} -password=${DB_PASSWORD} -connectRetries=60 migrate
+        volumes:
+            - ./scripts:/flyway/sql
+        networks:
+            - network
+        depends_on:
+            - postgres
 networks:
     network:
         driver: bridge

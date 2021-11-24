@@ -3,11 +3,11 @@ services:
     flask:
         build: .
         image: reclutamiento_flask:0.0.1
-        command: waitress-serve --port="${APP_PORT}" --call "reclutamiento:create_app"
+        command: waitress-serve --port="${FLASK_RUN_PORT}" --call "reclutamiento:create_app"
         env_file:
             - .env
         ports:
-            - "${APP_PORT:-80}:80"
+            - "${FLASK_RUN_PORT:-80}:80"
         networks:
             - network
         depends_on:

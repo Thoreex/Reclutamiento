@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Jobs{% endblock %}</h1>
-  {% if g.user %}
+  {% if g.user['is_admin'] == True %}
   <ul class="nav">
     <li class="nav-item">
       <a class="nav-link" href="{{ url_for('jobs.create') }}">New</a>
@@ -20,7 +19,7 @@
             <h5 class="card-title">{{ job['title'] }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">by {{ job['first_name'] + ' ' + job['last_name'] }} on {{ job['created'].strftime('%Y-%m-%d') }}</h6>
             <p class="card-text">{{ job['body'] }}</p>
-            {% if g.user['id'] == job['author_id'] %}
+            {% if g.user['is_admin'] == True %}
               <a href="{{ url_for('jobs.update', id=job['id']) }}" class="card-link">Edit</a>
               <a href="{{ url_for('jobs.delete', id=job['id']) }}" class="card-link">Delete</a>
             {% endif %}

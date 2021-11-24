@@ -29,7 +29,7 @@ def load_logged_in_user():
         curs = get_curs(conn)
 
         curs.execute(
-            'SELECT id, username, password, first_name, last_name FROM tbl_user WHERE id = %s', (user_id,)
+            'SELECT id, username, password, first_name, last_name, is_admin FROM tbl_user WHERE id = %s', (user_id,)
         )
         g.user = curs.fetchone()
 
@@ -80,7 +80,7 @@ def login():
         curs = get_curs(conn)
 
         curs.execute(
-            'SELECT id, username, password, first_name, last_name FROM tbl_user WHERE username = %s', (username,)
+            'SELECT id, username, password, first_name, last_name, is_admin FROM tbl_user WHERE username = %s', (username,)
         )
         user = curs.fetchone()
 

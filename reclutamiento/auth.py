@@ -40,6 +40,8 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
         error = None
 
         if not username:
@@ -54,8 +56,8 @@ def register():
                 curs = get_curs(conn)
 
                 curs.execute(
-                    "INSERT INTO tbl_user (username, password, first_name, last_name) VALUES (%s, %s)",
-                    (username, generate_password_hash(password)),
+                    "INSERT INTO tbl_user (username, password, first_name, last_name) VALUES (%s, %s, %s, %s)",
+                    (username, generate_password_hash(password), first_name, last_name),
                 )
                 conn.commit()
 

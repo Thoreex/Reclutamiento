@@ -34,6 +34,7 @@ def index():
         'SELECT j.id, title, body, created_at, deleted_at, responsible_id, username, first_name, last_name'
         ' FROM tbl_job j'
         ' JOIN tbl_user u ON j.responsible_id = u.id'
+        f'{" WHERE deleted_at IS NULL" if g.user is None or g.user["is_admin"] == False else ""}'
         ' ORDER BY created_at DESC'
     )
     jobs = curs.fetchall()

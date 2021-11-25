@@ -65,9 +65,10 @@ def register():
             except conn.IntegrityError:
                 error = f"User {username} is already registered."
             else:
+                flash('Your registration has been successfully completed.', 'success')
                 return redirect(url_for("auth.login"))
 
-        flash(error)
+        flash(error, 'danger')
 
     return render_template('auth/register.html')
 
@@ -94,13 +95,17 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
+            
+            flash('You are successfully logged in.', 'success')
             return redirect(url_for('index'))
 
-        flash(error)
+        flash(error, 'danger')
 
     return render_template('auth/login.html')
 
 @bp.route('/logout')
 def logout():
     session.clear()
+
+    flash('You are successfully logged out.', 'success')
     return redirect(url_for('index'))

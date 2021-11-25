@@ -53,7 +53,7 @@ def create():
             error = 'Title is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'danger')
         else:
             conn = get_conn()
             curs = get_curs(conn)
@@ -65,6 +65,7 @@ def create():
             )
             conn.commit()
 
+            flash(f'{ title } has been successfully created.', 'success')
             return redirect(url_for('jobs.index'))
 
     return render_template('jobs/create.html')
@@ -83,7 +84,7 @@ def update(id):
             error = 'Title is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'danger')
         else:
             conn = get_conn()
             curs = get_curs(conn)
@@ -95,6 +96,7 @@ def update(id):
             )
             conn.commit()
 
+            flash(f'{ job["title"] } has been successfully updated.', 'success')
             return redirect(url_for('jobs.index'))
 
     return render_template('jobs/update.html', job=job)
@@ -102,7 +104,7 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('GET', 'POST'))
 @login_required
 def delete(id):
-    get_job(id)
+    job = get_job(id)
 
     conn = get_conn()
     curs = get_curs(conn)
@@ -110,4 +112,5 @@ def delete(id):
     curs.execute('UPDATE tbl_job SET deleted_at = CURRENT_TIMESTAMP WHERE id = %s', (id,))
     conn.commit()
 
+    flash(f'{ job["title"] } has been successfully deleted.', 'success')
     return redirect(url_for('jobs.index'))

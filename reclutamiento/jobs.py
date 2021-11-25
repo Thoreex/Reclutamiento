@@ -5,14 +5,14 @@ from werkzeug.exceptions import abort
 from reclutamiento.auth import login_required
 from reclutamiento.db import get_conn, get_curs
 
-def get_job(id, check_author=True):
+def get_job(id):
     conn = get_conn()
     curs = get_curs(conn)
 
     curs.execute(
-        'SELECT j.id, title, body, created, author_id, username, first_name, last_name'
+        'SELECT j.id, title, body, created_at, deleted_at, responsible_id, username, first_name, last_name'
         ' FROM tbl_job j'
-        ' JOIN tbl_user u ON j.author_id = u.id'
+        ' JOIN tbl_user u ON j.responsible_id = u.id'
         ' WHERE j.id = %s',
         (id,)
     )
@@ -20,9 +20,6 @@ def get_job(id, check_author=True):
 
     if job is None:
         abort(404, f"Job id {id} doesn't exist.")
-
-    if check_author and job['author_id'] != g.user['id']:
-        abort(403)
 
     return job
 
@@ -34,10 +31,10 @@ def index():
     curs = get_curs(conn)
 
     curs.execute(
-        'SELECT j.id, title, body, created, author_id, username, first_name, last_name'
+        'SELECT j.id, title, body, created_at, deleted_at, responsible_id, username, first_name, last_name'
         ' FROM tbl_job j'
-        ' JOIN tbl_user u ON j.author_id = u.id'
-        ' ORDER BY created DESC'
+        ' JOIN tbl_user u ON j.responsible_id = u.id'
+        ' ORDER BY created_at DESC'
     )
     jobs = curs.fetchall()
 
@@ -61,7 +58,7 @@ def create():
             curs = get_curs(conn)
 
             curs.execute(
-                'INSERT INTO tbl_job (title, body, author_id)'
+                'INSERT INTO tbl_job (title, body, responsible_id)'
                 ' VALUES (%s, %s, %s)',
                 (title, body, g.user['id'])
             )
@@ -105,10 +102,11 @@ def update(id):
 @login_required
 def delete(id):
     get_job(id)
+
     conn = get_conn()
     curs = get_curs(conn)
 
-    curs.execute('DELETE FROM tbl_job WHERE id = %s', (id,))
+    curs.execute('UPDATE tbl_job SET deleted_at = CURRENT_TIMESTAMP WHERE id = %s', (id,))
     conn.commit()
 
     return redirect(url_for('jobs.index'))

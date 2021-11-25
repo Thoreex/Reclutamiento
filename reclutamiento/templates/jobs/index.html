@@ -14,16 +14,21 @@
   <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for job in jobs %}
       <div class="col">
-        <div class="card">
+        <div class="card {{ 'text-white bg-secondary' if job['deleted_at'] is not none }} h-100">
           <div class="card-body">
             <h5 class="card-title">{{ job['title'] }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">by {{ job['first_name'] + ' ' + job['last_name'] }} on {{ job['created'].strftime('%Y-%m-%d') }}</h6>
+            <h6 class="card-subtitle mb-2 {{ 'text-muted' if job['deleted_at'] is none }}">by {{ job['first_name'] + ' ' + job['last_name'] }}</h6>
             <p class="card-text">{{ job['body'] }}</p>
             {% if g.user['is_admin'] == True %}
-              <a href="{{ url_for('jobs.update', id=job['id']) }}" class="card-link">Edit</a>
-              <a href="{{ url_for('jobs.delete', id=job['id']) }}" class="card-link">Delete</a>
+              <a href="{{ url_for('jobs.update', id=job['id']) }}" class="btn btn-primary">Edit</a>
+              <a href="{{ url_for('jobs.delete', id=job['id']) }}" class="btn btn-danger">Delete</a>
             {% endif %}
           </div>
+          {% if job['deleted_at'] is none %}
+          <div class="card-footer {{ 'text-muted' if job['deleted_at'] is none }}">
+            {{ time_ago(job['created_at']) }}
+          </div>
+          {% endif %}
         </div>
       </div>
     {% endfor %}

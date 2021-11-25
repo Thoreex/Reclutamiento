@@ -8,7 +8,7 @@ def create_app(test_config=None):
     from . import settings
     settings.init_app(app)
 
-    # import utility module
+    # import utilities module
     from . import utilities
     utilities.init_app(app)
 

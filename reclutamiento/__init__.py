@@ -9,8 +9,8 @@ def create_app(test_config=None):
     settings.init_app(app)
 
     # import utility module
-    from . import utility
-    utility.init_app(app)
+    from . import utilities
+    utilities.init_app(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

@@ -11,7 +11,7 @@ def utility_processor():
 
         long = diff.seconds
         if long < seconds_in_minutes:
-            return str(long) + f' second{"s" if long > 1 else ""} ago'
+            return 'Just now'
         
         long //= seconds_in_minutes
         if long >= 1 and long < minutes_in_hours:

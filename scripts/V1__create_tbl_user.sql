@@ -4,8 +4,7 @@ CREATE TABLE tbl_user (
     password VARCHAR(128) NOT NULL,
     first_name VARCHAR(32) NOT NULL,
     last_name VARCHAR(32) NOT NULL,
+    email varchar(320) NOT NULL,
+    phone_number VARCHAR(50) NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
-
-INSERT INTO tbl_user (username, password, first_name, last_name, is_admin)
-VALUES ('admin', 'pbkdf2:sha256:260000$YAw3lhu3TjFjxfsz$59bac94ff7b09a12133a6dec8f23defe8a03d30e87c394cb89a74056ef31381a', 'Administrator', 'User', TRUE);

@@ -29,7 +29,7 @@ def load_logged_in_user():
         curs = get_curs(conn)
 
         curs.execute(
-            'SELECT id, username, password, first_name, last_name, is_admin FROM tbl_user WHERE id = %s', (user_id,)
+            'SELECT id, username, password, first_name, last_name, email, phone_number, is_admin FROM tbl_user WHERE id = %s', (user_id,)
         )
         g.user = curs.fetchone()
 
@@ -42,6 +42,8 @@ def register():
         password = request.form['password']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
         error = None
 
         if not username:
@@ -56,8 +58,8 @@ def register():
                 curs = get_curs(conn)
 
                 curs.execute(
-                    "INSERT INTO tbl_user (username, password, first_name, last_name) VALUES (%s, %s, %s, %s)",
-                    (username, generate_password_hash(password), first_name, last_name),
+                    "INSERT INTO tbl_user (username, password, first_name, last_name, email, phone_number) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (username, generate_password_hash(password), first_name, last_name, email, phone_number),
                 )
                 conn.commit()
 
@@ -83,7 +85,7 @@ def login():
         curs = get_curs(conn)
 
         curs.execute(
-            'SELECT id, username, password, first_name, last_name, is_admin FROM tbl_user WHERE username = %s', (username,)
+            'SELECT id, username, password, first_name, last_name, email, phone_number, is_admin FROM tbl_user WHERE username = %s', (username,)
         )
         user = curs.fetchone()
 

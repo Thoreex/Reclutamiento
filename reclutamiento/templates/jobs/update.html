@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit "{{ job['title'] }}"{% endblock %}</h1>
+  <h1>{% block title %}Edit {{ job['title'] }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
     </div>
     <div class="mb-3">
       <div class="form-floating">
-        <textarea class="form-control" name="body" id="body" style="height: 100px">{{ request.form['body'] or job['body'] }}</textarea>
+        <textarea class="form-control" name="body" id="body" style="height: 100px" required>{{ request.form['body'] or job['body'] }}</textarea>
         <label for="body">Body</label>
       </div>
     </div>

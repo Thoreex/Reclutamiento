@@ -35,7 +35,7 @@ def index(id):
     curs = get_curs(conn)
 
     curs.execute(
-        'SELECT e.id, applicant_id, start_date, end_date, education_type_id, et.name, institution_name, education_name'
+        'SELECT e.id, applicant_id, start_date, end_date, institution_name, education_type_id, et.name, education_name'
         ' FROM tbl_education e'
         ' INNER JOIN tbl_education_type et ON e.education_type_id = et.id'
     )

@@ -12,7 +12,7 @@ def get_education(id, check_owner=True):
     curs = get_curs(conn)
 
     curs.execute(
-        'SELECT e.id, applicant_id, start_date, end_date, et.name, institution_name, education_type_id, education_name'
+        'SELECT e.id, applicant_id, start_date, end_date, institution_name, education_type_id, et.name, education_name'
         ' FROM tbl_education e'
         ' INNER JOIN tbl_education_type et ON e.education_type_id = et.id'
         ' WHERE e.id = %s',

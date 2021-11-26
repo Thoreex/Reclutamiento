@@ -7,28 +7,40 @@
 {% block content %}
   <form method="post">
     <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" name="username" id="username" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="username" id="username" required>
+        <label for="username">Username</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" name="password" id="password" required>
+      <div class="form-floating">
+        <input type="password" class="form-control" name="password" id="password" required>
+        <label for="password">Password</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="first_name" class="form-label">First name</label>
-      <input type="text" class="form-control" name="first_name" id="first_name" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="first_name" id="first_name" required>
+        <label for="first_name">First name</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="last_name" class="form-label">Last name</label>
-      <input type="text" class="form-control" name="last_name" id="last_name" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="last_name" id="last_name" required>
+        <label for="last_name">Last name</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" name="email" id="email" required>
+      <div class="form-floating">
+        <input type="email" class="form-control" name="email" id="email" required>
+        <label for="email">Email</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="phone_number" class="form-label">Phone number</label>
-      <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+        <label for="phone_number">Phone number</label>
+      </div>
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
   </form>

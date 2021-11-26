@@ -7,20 +7,28 @@
 {% block content %}
   <form method="post">
     <div class="mb-3">
-      <label for="first_name" class="form-label">First name</label>
-      <input type="text" class="form-control" name="first_name" id="first_name" value="{{ request.form['first_name'] or profile['first_name'] }}" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="first_name" id="first_name" value="{{ request.form['first_name'] or profile['first_name'] }}" required>
+        <label for="first_name">First name</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="last_name" class="form-label">Last name</label>
-      <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.form['last_name'] or profile['last_name'] }}" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.form['last_name'] or profile['last_name'] }}" required>
+        <label for="last_name">Last name</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" name="email" id="email" value="{{ request.form['email'] or profile['email'] }}" required>
+      <div class="form-floating">
+        <input type="email" class="form-control" name="email" id="email" value="{{ request.form['email'] or profile['email'] }}" required>
+        <label for="email">Email</label>
+      </div>
     </div>
     <div class="mb-3">
-      <label for="phone_number" class="form-label">Phone number</label>
-      <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ request.form['phone_number'] or profile['phone_number'] }}" required>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ request.form['phone_number'] or profile['phone_number'] }}" required>
+        <label for="phone_number">Phone number</label>
+      </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
   </form>

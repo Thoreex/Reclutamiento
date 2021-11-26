@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-title">{{ profile['first_name'] + ' ' + profile['last_name'] }}</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="fas fa-envelope"></i> {{ profile['email'] }}</li>
+        <li class="list-group-item"><i class="fas fa-phone"></i> {{ profile['phone_number'] }}</li>
+      </ul>
+      <div class="card-body">
+        {% if g.user is not none and g.user['id'] == profile['id'] %}
+          <a href="{{ url_for('profile.update', id=profile['id']) }}" class="btn btn-primary">Edit</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        Education
+      </div>
+      {% if educations|length > 0 %}
+      <ul class="list-group list-group-flush">
+        {% for education in educations %}
+        <li class="list-group-item flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ education['education_name'] }}</h5>
+            {% if g.user is not none and g.user['id'] == profile['id'] %}
+              <a href="{{ url_for('profile.education.remove', profile_id=profile['id'], education_id=education['id']) }}" class="btn btn-danger">Remove</a>
+            {% endif %}
+          </div>
+          <p class="mb-1">{{ education['institution_name'] }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="card-body">
+        {% if g.user is not none and g.user['id'] == profile['id'] %}
+          <a href="{{ url_for('profile.education.add', profile_id=profile['id']) }}" class="btn btn-primary">Add</a>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}

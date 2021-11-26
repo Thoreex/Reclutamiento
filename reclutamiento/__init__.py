@@ -32,6 +32,12 @@ def create_app(test_config=None):
     app.register_blueprint(jobs.bp)
     app.add_url_rule('/', endpoint='index')
 
-    # import recruitment module
+    # import profile module
+    from . import profile
+    from . import education
+    profile.bp.register_blueprint(education.bp)
+    app.register_blueprint(profile.bp)
+
+    # import education module
 
     return app

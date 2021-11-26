@@ -18,7 +18,7 @@
         {% endif %}
       </div>
     </div>
-    <div class="card">
+    <div class="card mb-2">
       <div class="card-header">
         Education
       </div>
@@ -40,6 +40,31 @@
       <div class="card-body">
         {% if g.user is not none and g.user['id'] == profile['id'] %}
           <a href="{{ url_for('profile.education.add', profile_id=profile['id']) }}" class="btn btn-primary">Add</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-header">
+        Experience
+      </div>
+      {% if experiences|length > 0 %}
+      <ul class="list-group list-group-flush">
+        {% for experience in experiences %}
+        <li class="list-group-item flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ experience['job_title'] + ' (' + experience['company_name'] + ')' }}</h5>
+            {% if g.user is not none and g.user['id'] == profile['id'] %}
+              <a href="{{ url_for('profile.experience.remove', profile_id=profile['id'], experience_id=experience['id']) }}" class="btn btn-danger">Remove</a>
+            {% endif %}
+          </div>
+          <p class="mb-1">{{ experience['job_description'] }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="card-body">
+        {% if g.user is not none and g.user['id'] == profile['id'] %}
+          <a href="{{ url_for('profile.experience.add', profile_id=profile['id']) }}" class="btn btn-primary">Add</a>
         {% endif %}
       </div>
     </div>

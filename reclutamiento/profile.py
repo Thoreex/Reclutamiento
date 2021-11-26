@@ -41,7 +41,13 @@ def index(id):
     )
     educations = curs.fetchall()
 
-    return render_template('profile/index.html', profile=profile, educations=educations)
+    curs.execute(
+        'SELECT id, applicant_id, start_date, end_date, company_name, job_title, job_description'
+        ' FROM tbl_experience e'
+    )
+    experiences = curs.fetchall()
+
+    return render_template('profile/index.html', profile=profile, educations=educations, experiences=experiences)
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required

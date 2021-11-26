@@ -18,6 +18,8 @@ def get_job(id):
     )
     job = curs.fetchone()
 
+    curs.close()
+
     if job is None:
         abort(404, f"Job id {id} doesn't exist.")
 
@@ -38,6 +40,8 @@ def index():
         ' ORDER BY created_at DESC'
     )
     jobs = curs.fetchall()
+
+    curs.close()
 
     return render_template('jobs/index.html', jobs=jobs)
 
@@ -64,6 +68,8 @@ def create():
                 (title, body, g.user['id'])
             )
             conn.commit()
+
+            curs.close()
 
             flash(f'{ title } has been successfully created.', 'success')
             return redirect(url_for('jobs.index'))
@@ -96,6 +102,8 @@ def update(id):
             )
             conn.commit()
 
+            curs.close()
+
             flash(f'{ job["title"] } has been successfully updated.', 'success')
             return redirect(url_for('jobs.index'))
 
@@ -111,6 +119,8 @@ def delete(id):
 
     curs.execute('UPDATE tbl_job SET deleted_at = CURRENT_TIMESTAMP WHERE id = %s', (id,))
     conn.commit()
+
+    curs.close()
 
     flash(f'{ job["title"] } has been successfully deleted.', 'success')
     return redirect(url_for('jobs.index'))

@@ -17,6 +17,8 @@ def get_profile(id, check_owner=True):
     )
     profile = curs.fetchone()
 
+    curs.close()
+
     if profile is None:
         abort(404, f"Profile id {id} doesn't exist.")
 
@@ -46,6 +48,8 @@ def index(id):
         ' FROM tbl_experience e'
     )
     experiences = curs.fetchall()
+
+    curs.close()
 
     return render_template('profile/index.html', profile=profile, educations=educations, experiences=experiences)
 
@@ -85,6 +89,8 @@ def update(id):
                 (first_name, last_name, email, phone_number, id)
             )
             conn.commit()
+
+            curs.close()
 
             flash(f'Profile has been successfully updated.', 'success')
             return redirect(url_for('profile.index', id=profile['id']))

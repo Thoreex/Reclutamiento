@@ -19,6 +19,8 @@ def get_experience(id, check_owner=True):
     )
     experience = curs.fetchone()
 
+    curs.close()
+
     if experience is None:
         abort(404, f"Experience id {id} doesn't exist.")
 
@@ -73,6 +75,8 @@ def add(profile_id):
             )
             conn.commit()
 
+            curs.close()
+
             flash('Experience has been successfully created.', 'success')
             return redirect(url_for('profile.index', id=profile_id))
 
@@ -88,6 +92,8 @@ def remove(profile_id, experience_id):
 
     curs.execute('DELETE FROM tbl_experience WHERE id = %s', (experience_id,))
     conn.commit()
+
+    curs.close()
 
     flash('Experience has been successfully removed.', 'success')
     return redirect(url_for('profile.index', id=profile_id))

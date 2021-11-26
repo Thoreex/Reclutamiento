@@ -20,6 +20,8 @@ def get_education(id, check_owner=True):
     )
     education = curs.fetchone()
 
+    curs.close()
+
     if education is None:
         abort(404, f"Education id {id} doesn't exist.")
 
@@ -74,6 +76,8 @@ def add(profile_id):
             )
             conn.commit()
 
+            curs.close()
+
             flash('Education has been successfully created.', 'success')
             return redirect(url_for('profile.index', id=profile_id))
 
@@ -85,6 +89,8 @@ def add(profile_id):
         ' FROM tbl_education_type'
     )
     education_types = curs.fetchall()
+
+    curs.close()
 
     return render_template('education/add.html', education_types=education_types)
 
@@ -98,6 +104,8 @@ def remove(profile_id, education_id):
 
     curs.execute('DELETE FROM tbl_education WHERE id = %s', (education_id,))
     conn.commit()
+
+    curs.close()
 
     flash('Education has been successfully removed.', 'success')
     return redirect(url_for('profile.index', id=profile_id))

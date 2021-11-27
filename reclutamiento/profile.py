@@ -40,7 +40,7 @@ def index(id):
         'SELECT e.id, applicant_id, start_date, end_date, institution_name, education_type_id, et.name, education_name'
         ' FROM tbl_education e'
         ' INNER JOIN tbl_education_type et ON e.education_type_id = et.id'
-        ' WHERE applicant_id = %s'
+        ' WHERE applicant_id = %s',
         (id,)
     )
     educations = curs.fetchall()
@@ -48,7 +48,7 @@ def index(id):
     curs.execute(
         'SELECT id, applicant_id, start_date, end_date, company_name, job_title, job_description'
         ' FROM tbl_experience'
-        ' WHERE applicant_id = %s'
+        ' WHERE applicant_id = %s',
         (id,)
     )
     experiences = curs.fetchall()

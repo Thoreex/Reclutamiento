@@ -19,6 +19,12 @@
             <h5 class="card-title">{{ job['title'] }}</h5>
             <h6 class="card-subtitle mb-2 {{ 'text-muted' if job['deleted_at'] is none }}">by {{ job['first_name'] + ' ' + job['last_name'] }}</h6>
             <p class="card-text">{{ job['body'] }}</p>
+            {% if g.user is not none and job['application_id'] is none %}
+              <a href="{{ url_for('jobs.apply', id=job['id']) }}" class="btn btn-secondary">Apply</a>
+            {% endif %}
+            {% if g.user is not none and job['application_id'] is not none %}
+              <a href="{{ url_for('jobs.withdraw', id=job['id']) }}" class="btn btn-success">Withdraw</a>
+            {% endif %}
             {% if g.user is not none and g.user['is_admin'] == True and job['deleted_at'] is none %}
               <a href="{{ url_for('jobs.update', id=job['id']) }}" class="btn btn-primary">Edit</a>
               <a href="{{ url_for('jobs.delete', id=job['id']) }}" class="btn btn-danger">Delete</a>

@@ -25,6 +25,28 @@ def get_job(id):
 
     return job
 
+def get_application(applicant_id, job_id, check_owner=True):
+    conn = get_conn()
+    curs = get_curs(conn)
+
+    curs.execute(
+        'SELECT id, applicant_id, job_id, application_date'
+        ' FROM tbl_application'
+        ' WHERE applicant_id = %s and job_id = %s',
+        (applicant_id, job_id)
+    )
+    application = curs.fetchone()
+
+    curs.close()
+
+    if application is None:
+        abort(404, f"Job id {id} doesn't exist.")
+
+    if check_owner and application['applicant_id'] != g.user['id']:
+        abort(403)
+
+    return application
+
 bp = Blueprint('jobs', __name__)
 
 @bp.route('/')
@@ -32,13 +54,24 @@ def index():
     conn = get_conn()
     curs = get_curs(conn)
 
-    curs.execute(
-        'SELECT j.id, title, body, created_at, deleted_at, responsible_id, username, first_name, last_name'
-        ' FROM tbl_job j'
-        ' JOIN tbl_user u ON j.responsible_id = u.id'
-        f'{" WHERE deleted_at IS NULL" if g.user is None or g.user["is_admin"] == False else ""}'
-        ' ORDER BY created_at DESC'
-    )
+    if (g.user is None):
+        curs.execute(
+            'SELECT j.id, j.title, j.body, j.created_at, j.deleted_at, j.responsible_id, u.username, u.first_name, u.last_name, 0 AS application_id'
+            ' FROM tbl_job j'
+            ' INNER JOIN tbl_user u ON j.responsible_id = u.id'
+            f'{" WHERE deleted_at IS NULL" if g.user is None or g.user["is_admin"] == False else ""}'
+            ' ORDER BY created_at DESC'
+        )
+    else:
+        curs.execute(
+            'SELECT j.id, j.title, j.body, j.created_at, j.deleted_at, j.responsible_id, u.username, u.first_name, u.last_name, a.id AS application_id'
+            ' FROM tbl_job j'
+            ' INNER JOIN tbl_user u ON j.responsible_id = u.id'
+            ' LEFT JOIN tbl_application a ON %s = a.applicant_id and j.id = a.job_id'
+            f'{" WHERE deleted_at IS NULL" if g.user is None or g.user["is_admin"] == False else ""}'
+            ' ORDER BY created_at DESC',
+            (g.user["id"],)
+        )
     jobs = curs.fetchall()
 
     curs.close()
@@ -123,4 +156,32 @@ def delete(id):
     curs.close()
 
     flash(f'{ job["title"] } has been successfully deleted.', 'success')
+    return redirect(url_for('jobs.index'))
+
+@bp.route('/<int:id>/apply', methods=('GET', 'POST'))
+@login_required
+def apply(id):
+    conn = get_conn()
+    curs = get_curs(conn)
+
+    curs.execute('INSERT INTO tbl_application (applicant_id, job_id) VALUES (%s, %s)', (g.user['id'], id))
+    conn.commit()
+
+    curs.close()
+
+    flash('You have successfully applied.', 'success')
+    return redirect(url_for('jobs.index'))
+
+@bp.route('/<int:id>/withdraw', methods=('GET', 'POST'))
+@login_required
+def withdraw(id):
+    conn = get_conn()
+    curs = get_curs(conn)
+
+    curs.execute('DELETE FROM tbl_application WHERE applicant_id = %s and job_id = %s', (g.user['id'], id))
+    conn.commit()
+
+    curs.close()
+
+    flash('You have successfully withdrawn.', 'success')
     return redirect(url_for('jobs.index'))
